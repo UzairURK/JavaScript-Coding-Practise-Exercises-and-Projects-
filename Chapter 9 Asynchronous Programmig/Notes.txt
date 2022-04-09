@@ -1,0 +1,12 @@
+9.1 Concurrent Tasks in JavaScript
+A program is “concurrent” when it manages multiple activities with overlapping timelines.
+
+In contrast, a JavaScript program runs in a single thread. In particular, once a function starts, it will run to completion before any other part of your program starts running. That is good. You know that no other code will corrupt the data that your function uses. No other code will try to read any of the data until after the function returns. Inside your function, you can modify the program’s variables to your heart’s content, as long as you clean up before the function returns. You never have to worry about mut or deadlocks
+
+time-consuming operations in JavaScript are always asynchronous
+
+
+
+
+
+

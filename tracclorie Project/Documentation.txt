@@ -1,0 +1,8 @@
+We will use Module pattern
+we will have 
+Storage Controller  For Local Storage
+Item Controller for local data (Item and Calraie)
+UI Controllaer (Showing, Hiding things and geting inputs) 
+Main App Controller where every will thing meet.There we have initialzer, Event listeners.
+This project gives us the feel of React or Angular with Vanilla JavaScript.
+Chanllenge: Add more like. Add day and date to set Calraies for that day and date. Switch from localStorage to some Restful APIs

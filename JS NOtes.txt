@@ -1,0 +1,110 @@
+Chapter		Asynchrouns Javascript
+* 9.1 	                 Concurrent Tasks in JavaScript
+- A program is “concurrent” when it manages multiple activities with overlapping timelines. 
+- a JavaScript program runs in a single thread. In particular, once a function starts, it will run to completion before any other part of your program starts running
+- Thread in computer science is the execution of running multiple tasks or programs at the same time. Each unit capable of executing code is called a thread. However, modern JavaScript offers ways to create additional threads, each executing independently while possibly communicating between one another.
+- If a program needs to wait for something to happen—most commonly, for data across the Internet—it cannot do anything else. Therefore, time-consuming operations in JavaScript are always asynchronous. 
+* 9.2 Making Promises
+The Promise constructor has a single argument, a function that has two arguments: handlers for success and failure outcomes. This function is called the “executor function.”
+Example: 
+const myPromise = new Promise((resolve, reject) => {
+  // Body of the executor function
+})
+
+- In the body of the executor function, you start the task that yields the desired result. Once the result is available, you pass it to the resolve handler. Or, if you know that there won’t be a result, you invoke the reject handler with the reason for failure. When work is completed asynchronously, these handlers will be invoked in some callback.
+
+-Here is an outline of the process:
+const myPromise = new Promise((resolve, reject) => {
+  const callback = (args) => {
+    . . .
+    if (success) resolve(result) else reject(reason)
+  }
+  invokeTask(callback)
+})
+
+- The then method is invoked with a resolve handler.
+- Use the then method to specify an action that should be carried out once the promise is resolved. The action is a function that consumes the result.
+* 9.5 Promise Chaining
+If the action that you pass to then yields another promise, the result is that other promise. To process its result, call the then method once again.
+Technically, if a then action yields a value that isn’t a promise, the then method returns an immediately fulfilled promise.
+
+*9.6 Rejection Handling:
+a pipeline has a single rejection handler that is invoked when any of the tasks fails. If a then action throws an exception, the then method yields a rejected promise. Chaining a rejected promise with another then simply propagates that rejected promise. Therefore, the catch handler at the end will handle a rejection at any stage of the pipeline.
+
+*9.7 Executing Multiple Promises:
+When you have multiple promises and you want them all resolved, you can place them into an array or any iterable, and call Promise.all(iterable).
+- The Promise.all does not actually run tasks in parallel. All tasks are executed sequentially in a single thread. However, the order in which they are scheduled is not predictable. For example, in the image loading example, you don’t know which image data arrives first.
+
+*9.9 Async Functions:
+let value = await promise
+waits for the promise to settle and yields its value.
+The await operator can only occur in a function that is tagged with the async keyword.
+--------------------------------------------------------------------
+const putImage = async (url, element) => {
+  const img = await loadImage(url)
+  element.appendChild(img)
+}
+the putImage function is equivalent to:
+
+const putImage = (url, element) => {
+  loadImage(url)
+    .then(img => element.appendChild(img))
+}
+
+-----------------------------------------------------------------------
+Multiple await are OK:
+const putTwoImages = async (url1, url2, element) => {
+  const img1 = await loadImage(url1)
+  element.appendChild(img1)
+  const img2 = await loadImage(url2)
+  element.appendChild(img2)
+}
+
+----------------------------------------------------------
+Loops are OK too:
+const putImages = async (urls, element) => {
+  for (url of urls) {
+    const img = await loadImage(url)
+    element.appendChild(img)
+  }
+}
+
+Error:
+const putImages = async (urls, element) => {
+  for (url of urls)
+    putImage(url, element) // Error—no await for async putImage
+}
+We can use async keyword to following
+Arrow functions:
+
+
+async url => { . . . }
+async (url, params) => { . . . }
+
+Methods:
+
+class ImageLoader {
+  async load(url) { . . . }
+}
+
+Named and anonymous functions:
+
+async function loadImage(url) { . . . }
+async function(url) { . . . }
+
+Object literal methods:
+
+obj = {
+  async loadImage(url) { . . . },
+  . . .
+}
+
+Note
+In all cases, the resulting function is an AsyncFunction instance, not a Function, even though typeof still reports 'function'.
+
+* 9.10 Async Return Values
+It always returns a promise.
+
+*9.11 Concurrent Await
+
+*9.12 Exceptions in Async Functions
